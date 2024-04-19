@@ -28,7 +28,7 @@ void CPU::loadContextCursor(const Context& context_instance) {
 
 /**
  * fetchContextCursor
- * Busco o contexto atual do processo em execução na CPU 
+ * Busco o contexto atual na CPU 
  * Uso para salvar o estado atual da CPU antes do chaveamento do processo
 */
 CPU::Context CPU::fetchContextCursor() const {

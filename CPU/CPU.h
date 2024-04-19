@@ -1,5 +1,5 @@
 #ifndef CPU_HEADER
-#define CPUCPU_HEADER_H
+#define CPU_HEADER
 
 #include <cstdint>
 
