@@ -1,5 +1,5 @@
-#ifndef CPU_HEADER
-#define CPU_HEADER
+#ifndef __CPU__
+#define __CPU__
 
 #include <cstdint>
 
@@ -49,12 +49,12 @@ public:
      * atual da CPU antes do chaveamento do processo 
     */
 
-    /* Inicializo os 6 registradores, stack_pointer, program_counter e status da CPU */
-    private:
-        uint64_t STACK_POINTER; 
-        uint64_t PROGRAM_COUNTER;
-        uint64_t STATUS;
-        uint64_t registrars[6];
+/* Inicializo os 6 registradores, stack_pointer, program_counter e status da CPU */
+private:
+    uint64_t STACK_POINTER; 
+    uint64_t PROGRAM_COUNTER;
+    uint64_t STATUS;
+    uint64_t registrars[6];
 };
 
 #endif

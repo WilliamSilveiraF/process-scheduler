@@ -1,7 +1,8 @@
-#ifndef PROCESS_HEADER
-#define PROCESS_HEADER
+#ifndef __PROCCESS__
+#define __PROCCESS__
 
 #include "CPU.h"
+#include <iostream>
 
 class Process {
 private:

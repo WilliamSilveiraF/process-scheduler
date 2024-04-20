@@ -1,4 +1,3 @@
-#include <iostream>
 #include "CPU.h"
 #include "Proccess.h"
 
