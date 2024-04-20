@@ -94,7 +94,7 @@ public:
      * logStats
      * - Logo todas as estatísticas para o algoritmo de escalonamento em execução
     */
-    virtual void logStats(int switched_context_amount, std:: string algorithm_name);
+    virtual void logStats(int switched_context_amount, std::string algorithm_name);
 
     /**
      * yield

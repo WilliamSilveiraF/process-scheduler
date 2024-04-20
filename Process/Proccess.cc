@@ -32,7 +32,7 @@ void Process::loadNewContext(const CPU::Context& newContext) {
 
 /**
  * fetchContext
- * Retorna o contexto do processo atual
+ * Retorno o contexto do processo atual
 */
 CPU::Context Process::fetchContext() const {
     return context;
