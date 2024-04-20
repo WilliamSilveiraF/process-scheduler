@@ -17,7 +17,7 @@
 class CPU {
 public:
     CPU(); /* Inicializo os 6 registradores, stack_pointer, program_counter e status da CPU */
-
+    ~CPU();
 
     /**
      * Implemento o contexto a fim de permitir a mudança de 
@@ -33,6 +33,7 @@ public:
         
         Context(); /* Inicializo os 6 registradores, stack_pointer, program_counter e status do contexto */
         Context(const Context& context_instance); /* Construo uma contexto a partir de uma cópia */
+        ~Context();
     };
 
 

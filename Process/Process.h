@@ -1,5 +1,5 @@
-#ifndef __PROCCESS__
-#define __PROCCESS__
+#ifndef __PROCESS__
+#define __PROCESS__
 
 #include "CPU.h"
 #include <iostream>
@@ -7,10 +7,9 @@
 class Process {
 private:
     int id;
-    int priority;
-
     int arrival_time;
     int execution_time;
+    int priority;
     int waiting_time; 
     int turnaround_time;
     int start_time;

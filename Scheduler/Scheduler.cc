@@ -1,7 +1,7 @@
 #include "Scheduler.h"
 
 /**
- * Secheduler (construtor)
+ * Scheduler (construtor)
  * - Carrego uma abstração de algoritmo
  * de escalonamento
  * - Deixo zerado o contador de chaveamento

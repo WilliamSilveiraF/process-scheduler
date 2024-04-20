@@ -1,9 +1,9 @@
 #include "CPU.h"
-#include "Proccess.h"
+#include "Process.h"
 
 /**
  * Construtor do processo
- * -> Cada processo possuim um contexto
+ * -> Cada processo possui um contexto
  * -> O processo é criado no estado Novo e como id, tempo de chega, tempo de execução e prioridade parametrizável
 */
 Process::Process(int id, int arrival_time, int execution_time, int priority)

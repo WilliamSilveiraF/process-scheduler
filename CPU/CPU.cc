@@ -62,5 +62,10 @@ CPU::Context::Context(const Context& context_instance) {
     PROGRAM_COUNTER = context_instance.PROGRAM_COUNTER;
     STATUS = context_instance.STATUS;
 
-    for (int i = 0; i < 6; +i) registrars[i] = context_instance.registrars[i];
+    for (int i = 0; i < 6; ++i) registrars[i] = context_instance.registrars[i];
 }
+
+CPU::Context::~Context() {}
+
+CPU::~CPU() {}
+

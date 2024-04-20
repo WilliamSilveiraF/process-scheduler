@@ -2,6 +2,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "Process.h"
+#include "Scheduler.h"
+#include "FCFS.h"
 
 using namespace std;
 
@@ -18,7 +21,12 @@ public:
 		os << "Creation time = " << p.creation_time << " duration = " << p.duration << " priority = " << p.priority << endl;
 		return os;
 	}
-	
+
+	//getters
+	int getCreationTime() { return creation_time; }
+	int getDuration() { return duration; }
+	int getPriority() { return priority; }
+
 private:	
 	int creation_time;
 	int duration; //seconds
@@ -29,54 +37,87 @@ class File
 {
 
 public:
-	File() {
-		myfile.open("entrada.txt");
-		if (!myfile.is_open()) {
-			cout << "Erro ao abrir o arquivo!\n";
-		}
-	}
-	
-	void read_file() {
-	
-		int a, b, c;
-		
-		if (!myfile.is_open()) {
-			cout << "Arquivo não está aberto!" << endl;
-		}
-		
-		while (myfile >> a >> b >> c) {
-			ProcessParams *p = new ProcessParams(a, b, c);
-			processes.push_back(p);
-		}
 
-		cout << "Quantidade de processos lidos do arquivo: " << processes.size() << endl;
-	}
+    File() {
+        myfile.open("entrada.txt");
+        if (!myfile.is_open()) {
+            cout << "Erro ao abrir o arquivo!\n";
+        }
+    }
+    
+    void read_file() {
+    
+        int a, b, c;
+        
+        if (!myfile.is_open()) {
+            cout << "Arquivo não está aberto!" << endl;
+        }
+        
+        int processID = 1;  // Assuming IDs start at 1 and increment by 1
+        while (myfile >> a >> b >> c) {
+            Process *p = new Process(processID, a, b, c);
+            processes.push_back(p);
+            processID++;  // Increment the process ID for the next process
+        }
 
-	void print_processes_params() {
-		vector<ProcessParams *>::iterator iter = processes.begin();
+        cout << "Quantidade de processos lidos do arquivo: " << processes.size() << endl;
+    }
 
-		for(iter; iter < processes.end(); iter++) {
-			ProcessParams *p = *iter;
-			cout << *p;
-		}
-	}
+    void print_processes_params() {
+        for (auto p : processes) {
+            cout << "\nProcess ID = " << p->getID() 
+                 << " Arrival Time = " << p->getArrivalTime()
+                 << " Burst Time = " << p->getExecutionTime()
+                 << " Priority = " << p->getPriority() << endl;
+        }
+    }
 
-	~File() {
-		for(int i = 0; i < processes.size() ; i++) {
-			ProcessParams *p = processes[i];
-			delete p;
-		}
-	}
+    vector<Process *> get_processes() {
+        return processes;
+    }
+
+    ~File() {
+        for(auto p : processes) {
+            delete p;
+        }
+    }
 
 private:
-	ifstream myfile; 
-	vector<ProcessParams *> processes;
+    ifstream myfile; 
+    vector<Process *> processes;
 };
 
-int main()
-{
-	File f;
-	f.read_file();
-	f.print_processes_params();
-}
 
+int main() {
+    // Read processes from the file
+    File fileReader;
+    fileReader.read_file();
+    fileReader.print_processes_params();
+
+    // Get processes
+    vector<Process *> processes = fileReader.get_processes();
+
+    // Start the simulations
+    std::cout<< " \n\n  ======================================\n"
+             << "||                                      ||\n"
+             << "||  Simulação de escalonamento de CPU   ||\n"
+             << "||                                      ||\n"
+            << "  ======================================\n" << std::endl;
+   
+    //======================================
+    // FCFS Scheduling Algorithm
+    //======================================
+
+    // Setup scheduler with FCFS algorithm
+    FCFS fcfsAlgorithm;
+    Scheduler scheduler(&fcfsAlgorithm);
+
+    // Add processes to scheduler
+    for(auto process : processes) {
+        scheduler.putProcess(process);
+    }
+
+    // Run the scheduling simulation for FCFS
+    scheduler.yield();
+    scheduler.restartProcessInstances(processes);
+}
