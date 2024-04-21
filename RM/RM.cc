@@ -10,7 +10,7 @@ RM::RM() {}
 Process* RM::orderReadyProcessInstancesByAlgorithmRules(std::vector<Process*> ready_process_instances) {
     std::sort(ready_process_instances.begin(), ready_process_instances.end(), 
         [](Process* a, Process* b) {
-            return a->getPriority() > b->getPriority(); 
+            return a->getPeriod() < b->getPeriod();  // Ordena pelo período em vez de prioridade
         }
     );
     return ready_process_instances.empty() ? nullptr : ready_process_instances.front();

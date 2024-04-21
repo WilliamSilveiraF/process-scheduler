@@ -67,7 +67,9 @@ public:
         for (auto p : processes) {
             cout << "\nProcess ID = " << p->getID() 
                  << " Arrival Time = " << p->getArrivalTime()
-                 << " Burst Time = " << p->getExecutionTime()
+                 << " Execution Time = " << p->getExecutionTime()
+                 << " Period = " << p->getPeriod()
+                 << " Deadline = " << p->getDeadline()
                  << " Priority = " << p->getPriority() << endl;
         }
     }
