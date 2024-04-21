@@ -9,7 +9,7 @@
 
 Process::Process(int id, int arrival_time, int execution_time, int period, int deadline, int priority)
 : id(id), arrival_time(arrival_time), execution_time(execution_time), period(period), 
-  deadline(deadline), priority(priority), waiting_time(0), turnaround_time(0), 
+  deadline(deadline), priority(priority), execution_time_workload(execution_time), waiting_time(0), turnaround_time(0), 
   start_time(0), end_time(0), remaining_time(period), state(NEW), context() 
 {};
 

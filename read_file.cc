@@ -47,15 +47,15 @@ public:
     
     void read_file() {
     
-        int a, b, c, d, e;
+        int arrival_time, execution_time, period, deadline, priority;
         
         if (!myfile.is_open()) {
             cout << "Arquivo não está aberto!" << endl;
         }
         
         int processID = 1;  // Assuming IDs start at 1 and increment by 1
-        while (myfile >> a >> b >> c >> d >> e) {
-            Process *p = new Process(processID, a, b, c, d, e);
+        while (myfile >> arrival_time >> execution_time >> period >> deadline >> priority) {
+            Process *p = new Process(processID, arrival_time, execution_time, period, deadline, priority);
             processes.push_back(p);
             processID++;  // Increment the process ID for the next process
         }
@@ -68,6 +68,7 @@ public:
             cout << "\nProcess ID = " << p->getID() 
                  << " Arrival Time = " << p->getArrivalTime()
                  << " Execution Time = " << p->getExecutionTime()
+                 << " Execution Time Workload = " << p->getExecutionTimeWorkload()
                  << " Period = " << p->getPeriod()
                  << " Deadline = " << p->getDeadline()
                  << " Priority = " << p->getPriority() << endl;

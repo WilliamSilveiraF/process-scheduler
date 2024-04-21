@@ -82,7 +82,7 @@ void RM::yield() {
         //std::cout << "P" << currentProcess->getID() << " remaining time " << currentProcess->getRemainingTime() << "\n";
         // Executa o processo pelo tempo de execução
         bool preemptionExecuted = 0;
-        for (int j = 0; j < currentProcess->getExecutionTime(); j++) {
+        while (currentProcess->getExecutionTime() > 0) {
             syncReadyQueue(currentTime);
             if (checkPreemptionAvaibility(currentProcess)) {
                 preemptionExecuted = 1;
@@ -93,6 +93,7 @@ void RM::yield() {
                 printProcessesState();
                 currentTime++;
                 syncReadyQueue(currentTime);
+                currentProcess->setExecutionTime(currentProcess->getExecutionTime()-1);
                 currentProcess->setRemainingTime(currentProcess->getRemainingTime()-1);
             } else {
                 break;
@@ -110,6 +111,7 @@ void RM::yield() {
             std::cout << "P" << currentProcess->getID() << " próxima execução em " << currentProcess->getArrivalTime() + currentProcess->getPeriod() << "\n";
             currentProcess->setArrivalTime(currentProcess->getArrivalTime() + currentProcess->getPeriod());
             currentProcess->setState(Process::SUSPENDED);
+            currentProcess->setExecutionTime(currentProcess->getExecutionTimeWorkload());
             holding_scheduler->putProcess(currentProcess);
         }
         //currentProcess->setTurnaroundTime(currentProcess->getEndTime() - currentProcess->getArrivalTime());
