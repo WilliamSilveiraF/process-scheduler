@@ -5,6 +5,7 @@
 #include "Process.h"
 #include "Scheduler.h"
 #include "RM.h"
+#include "EDF.h"
 
 using namespace std;
 
@@ -112,15 +113,31 @@ int main() {
     //======================================
 
     // Setup scheduler with RM algorithm
-    RM rmAlgorithm;
-    Scheduler scheduler(&rmAlgorithm);
+    //RM rmAlgorithm;
+    //Scheduler rm_scheduler(&rmAlgorithm);
+    //
+    //// Add processes to scheduler
+    //for(auto process : processes) {
+    //    rm_scheduler.putProcess(process);
+    //}
+    //
+    //// Run the scheduling simulation for RM
+    //rm_scheduler.yield();
+    //rm_scheduler.restartProcessInstances(processes);
+
+    //======================================
+    // EDF Scheduling Algorithm
+    //======================================
+
+    EDF edfAlgorithm;
+    Scheduler edf_scheduler(&edfAlgorithm);
 
     // Add processes to scheduler
     for(auto process : processes) {
-        scheduler.putProcess(process);
+        edf_scheduler.putProcess(process);
     }
 
-    // Run the scheduling simulation for RM
-    scheduler.yield();
-    scheduler.restartProcessInstances(processes);
+    // Run the scheduling simulation for EDF
+    edf_scheduler.yield();
+    edf_scheduler.restartProcessInstances(processes);
 }

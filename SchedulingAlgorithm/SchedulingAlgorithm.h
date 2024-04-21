@@ -107,11 +107,11 @@ public:
     }
 
     /**
-     * checkPreemptionAvaibility
+     * checkRMPreemptionAvaibility
      * - Verifica se um processo tem prioridade
      * maior do que o outro
     */
-    virtual bool checkPreemptionAvaibility(Process* executing_process) {
+    virtual bool checkRMPreemptionAvaibility(Process* executing_process) {
         /**
          * Posso premptar se acho algum processo em execução
          * com prioridade maior

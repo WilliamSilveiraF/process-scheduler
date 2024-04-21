@@ -1,22 +1,13 @@
+#include "EDF.h"
 #include <iostream>
-#include <queue>
 #include <algorithm>
-#include "Process.h"
-#include "SchedulingAlgorithm.h"
-#include "RM.h"
+#include "Scheduler.h"
 
-RM::RM() {}
+EDF::EDF() {}
 
-Process* RM::orderReadyProcessInstancesByAlgorithmRules(std::vector<Process*> ready_process_instances) {
-    std::sort(ready_process_instances.begin(), ready_process_instances.end(), 
-        [](Process* a, Process* b) {
-            return a->getPriority() > b->getPriority();  // Ordena pelo período em vez de prioridade
-        }
-    );
-    return ready_process_instances.empty() ? nullptr : ready_process_instances.front();
-}
+EDF::~EDF() {}
 
-void RM::yield() {
+void EDF::yield() {
     std::cout << "-> Início algoritmo Rate Monotonic - RM...\n\n";
 
     int currentTime = 0; // Representa o tempo atual na simulação
@@ -83,7 +74,7 @@ void RM::yield() {
         bool preemptionExecuted = 0;
         while (currentProcess->getExecutionTime() > 0) {
             syncReadyQueue(currentTime);
-            if (checkRMPreemptionAvaibility(currentProcess)) {
+            if (checkEDFPreemption(currentProcess)) {
                 preemptionExecuted = 1;
                 break;
             }
@@ -120,4 +111,23 @@ void RM::yield() {
 
     // Imprime os resultados da simulação
     logStats(holding_scheduler->getSwitchContextAmount(), algorithmName);
+}
+
+Process* EDF::orderReadyProcessInstancesByAlgorithmRules(std::vector<Process*> ready_process_instances) {
+    std::sort(ready_process_instances.begin(), ready_process_instances.end(), 
+        [](Process* a, Process* b) {
+            return a->getDeadline() < b->getDeadline();
+        }
+    );
+    return !ready_process_instances.empty() ? ready_process_instances.front() : nullptr;
+}
+
+bool EDF::checkEDFPreemption(Process* executing_process) {
+    for (auto &cursor : pidTable) {
+        Process* process_cursor = cursor.second;
+        if (process_cursor->getState() == Process::READY && process_cursor->getDeadline() < executing_process->getDeadline()) {
+            return true;
+        }
+    }
+    return false;
 }
