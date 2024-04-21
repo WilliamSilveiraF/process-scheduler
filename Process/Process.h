@@ -9,6 +9,8 @@ private:
     int id;
     int arrival_time;
     int execution_time;
+    int period;
+    int deadline;
     int priority;
     int waiting_time; 
     int turnaround_time;
@@ -19,7 +21,7 @@ private:
     CPU::Context context;
 
 public:
-    Process(int id, int arrival_time, int execution_time, int priority);
+    Process(int id, int arrival_time, int execution_time, int period, int deadline, int priority);
 
     enum State {
         NEW,
@@ -46,6 +48,12 @@ public:
     int getPriority() const { return priority; }
     void setPriority(int new_priority) { priority = new_priority; }
 
+    int getPeriod() const { return period; }
+    void setPeriod(int new_period) { period = new_period; }
+
+    int getDeadline() const { return deadline; }
+    void setDeadline(int new_deadline) { deadline = new_deadline; }
+    
     int getArrivalTime() const { return arrival_time; }
     void setArrivalTime(int new_arrival_time) { arrival_time = new_arrival_time; } 
     

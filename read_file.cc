@@ -4,7 +4,7 @@
 #include <vector>
 #include "Process.h"
 #include "Scheduler.h"
-#include "FCFS.h"
+#include "RM.h"
 
 using namespace std;
 
@@ -47,15 +47,15 @@ public:
     
     void read_file() {
     
-        int a, b, c;
+        int a, b, c, d, e;
         
         if (!myfile.is_open()) {
             cout << "Arquivo não está aberto!" << endl;
         }
         
         int processID = 1;  // Assuming IDs start at 1 and increment by 1
-        while (myfile >> a >> b >> c) {
-            Process *p = new Process(processID, a, b, c);
+        while (myfile >> a >> b >> c >> d >> e) {
+            Process *p = new Process(processID, a, b, c, d, e);
             processes.push_back(p);
             processID++;  // Increment the process ID for the next process
         }
@@ -105,19 +105,19 @@ int main() {
             << "  ======================================\n" << std::endl;
    
     //======================================
-    // FCFS Scheduling Algorithm
+    // RM Scheduling Algorithm
     //======================================
 
-    // Setup scheduler with FCFS algorithm
-    FCFS fcfsAlgorithm;
-    Scheduler scheduler(&fcfsAlgorithm);
+    // Setup scheduler with RM algorithm
+    RM rmAlgorithm;
+    Scheduler scheduler(&rmAlgorithm);
 
     // Add processes to scheduler
     for(auto process : processes) {
         scheduler.putProcess(process);
     }
 
-    // Run the scheduling simulation for FCFS
+    // Run the scheduling simulation for RM
     scheduler.yield();
     scheduler.restartProcessInstances(processes);
 }
