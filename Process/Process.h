@@ -18,6 +18,7 @@ private:
     int end_time;
     int remaining_time;
     int execution_time_workload;
+    int creation_time;
     int state;
     CPU::Context context;
 
@@ -79,6 +80,8 @@ public:
 
     int getExecutionTimeWorkload() const { return execution_time_workload; }
     void setExecutionTimeWorkload(int new_execution_time_workload) { execution_time_workload = new_execution_time_workload; }
+
+    int getCreationTime() const { return creation_time; }
 
     int getState() const { return state; }
     void setState(int new_state) { state = new_state; }

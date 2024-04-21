@@ -44,7 +44,6 @@ void RM::yield() {
                     break;
                 case Process::SUSPENDED:
                     std::cout << "ss ";
-                    p->setWaitingTime(p->getWaitingTime()+1);
                     break;
                 default:
                     std::cout << "   ";
@@ -102,7 +101,7 @@ void RM::yield() {
 
         if (currentProcess->getRemainingTime() <= 0) {
             currentProcess->setEndTime(currentTime);
-            //currentProcess->setTurnaroundTime(currentTime - currentProcess->getArrivalTime());
+            currentProcess->setTurnaroundTime(currentTime - currentProcess->getCreationTime());
             currentProcess->setState(Process::FINISHED);
         } else if (preemptionExecuted) {
             currentProcess->setState(Process::READY);
