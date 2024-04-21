@@ -5,23 +5,19 @@
 #include "SchedulingAlgorithm.h"
 #include "RM.h"
 
-// Construtor padrão do algoritmo RM
 RM::RM() {}
 
-// Função que ordena os processos prontos para execução.
-// Como o algoritmo é RM, ele simplesmente retorna o primeiro processo da lista.
 Process* RM::orderReadyProcessInstancesByAlgorithmRules(std::vector<Process*> ready_process_instances) {
     std::sort(ready_process_instances.begin(), ready_process_instances.end(), 
         [](Process* a, Process* b) {
-            return a->getPriority() < b->getPriority(); // Aqui usamos priority para armazenar o período
+            return a->getPriority() > b->getPriority(); 
         }
     );
     return ready_process_instances.empty() ? nullptr : ready_process_instances.front();
 }
 
-// Função que simula o algoritmo de escalonamento RM
 void RM::yield() {
-    std::cout << "-> Início algoritmo First Come First Served...\n\n";
+    std::cout << "-> Início algoritmo Rate Monotonic - RM...\n\n";
 
     int currentTime = 0; // Representa o tempo atual na simulação
     Process* prevProcess = nullptr; // Mantém o registro do processo anterior

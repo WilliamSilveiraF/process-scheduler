@@ -13,7 +13,7 @@
 class RM : public SchedulingAlgorithm {
 private:
     // Nome do algoritmo, usado para fins de impressão
-    const char * algorithmName = "First Come First Served";
+    const char * algorithmName = "Rate Monotonic Served";
 
 public:
     // Construtor padrão
