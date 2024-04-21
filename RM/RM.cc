@@ -10,7 +10,7 @@ RM::RM() {}
 Process* RM::orderReadyProcessInstancesByAlgorithmRules(std::vector<Process*> ready_process_instances) {
     std::sort(ready_process_instances.begin(), ready_process_instances.end(), 
         [](Process* a, Process* b) {
-            return a->getPeriod() < b->getPeriod();  // Ordena pelo período em vez de prioridade
+            return a->getPriority() > b->getPriority();  // Ordena pelo período em vez de prioridade
         }
     );
     return ready_process_instances.empty() ? nullptr : ready_process_instances.front();
@@ -41,7 +41,11 @@ void RM::yield() {
                 case Process::READY:
                     std::cout << "-- ";
                     p->setWaitingTime(p->getWaitingTime()+1);
-                    break; 
+                    break;
+                case Process::SUSPENDED:
+                    std::cout << "ss ";
+                    p->setWaitingTime(p->getWaitingTime()+1);
+                    break;
                 default:
                     std::cout << "   ";
                     break;
@@ -73,18 +77,43 @@ void RM::yield() {
         currentProcess->setStartTime(currentTime);
         currentProcess->setState(Process::EXECUTING);
 
-        // Executa o processo pelo tempo de burst
-        for (int j = 0; j < currentProcess->getExecutionTime(); ++j) {
+        
+        //std::cout << "P" << currentProcess->getID() << " execution time " << currentProcess->getExecutionTime() << "\n";
+        //std::cout << "P" << currentProcess->getID() << " remaining time " << currentProcess->getRemainingTime() << "\n";
+        // Executa o processo pelo tempo de execução
+        bool preemptionExecuted = 0;
+        for (int j = 0; j < currentProcess->getExecutionTime(); j++) {
             syncReadyQueue(currentTime);
-            printProcessesState();
-            currentTime++;
-            currentProcess->setRemainingTime(currentProcess->getRemainingTime()-1);
+            if (checkPreemptionAvaibility(currentProcess)) {
+                preemptionExecuted = 1;
+                break;
+            }
+    
+            if (currentProcess->getRemainingTime() > 0) {
+                printProcessesState();
+                currentTime++;
+                syncReadyQueue(currentTime);
+                currentProcess->setRemainingTime(currentProcess->getRemainingTime()-1);
+            } else {
+                break;
+            }
         }
 
-        // Atualiza as informações do processo após a execução
-        currentProcess->setEndTime(currentTime);
-        currentProcess->setTurnaroundTime(currentProcess->getEndTime() - currentProcess->getArrivalTime());
-        currentProcess->setState(Process::FINISHED);
+        if (currentProcess->getRemainingTime() <= 0) {
+            currentProcess->setEndTime(currentTime);
+            //currentProcess->setTurnaroundTime(currentTime - currentProcess->getArrivalTime());
+            currentProcess->setState(Process::FINISHED);
+        } else if (preemptionExecuted) {
+            currentProcess->setState(Process::READY);
+            holding_scheduler->putProcess(currentProcess);
+        } else {
+            std::cout << "P" << currentProcess->getID() << " próxima execução em " << currentProcess->getArrivalTime() + currentProcess->getPeriod() << "\n";
+            currentProcess->setArrivalTime(currentProcess->getArrivalTime() + currentProcess->getPeriod());
+            currentProcess->setState(Process::SUSPENDED);
+            holding_scheduler->putProcess(currentProcess);
+        }
+        //currentProcess->setTurnaroundTime(currentProcess->getEndTime() - currentProcess->getArrivalTime());
+        
         prevProcess = currentProcess;
     }
 

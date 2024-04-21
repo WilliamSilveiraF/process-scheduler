@@ -55,7 +55,7 @@ public:
     */
     virtual Process* handleNextProcess() {
         if (process_instances.empty()) { // Se não há nenhum processo a ser escalonado, retorno nullptr
-            std::cout << "SchedulingAlgorithm::handleNextProcess ~ No process instances are currently available for scheduling" << std::endl;
+            //std::cout << "SchedulingAlgorithm::handleNextProcess ~ No process instances are currently available for scheduling" << std::endl;
             return nullptr;
         }
 
@@ -67,7 +67,7 @@ public:
         }
 
         if (ready_process_instances.empty()) { // Se não há processos processos prontos, retorno nullptr
-            std::cout << "SchedulingAlgorithm::handleNextProcess ~ No ready process instances at this time." << std::endl;
+            //std::cout << "SchedulingAlgorithm::handleNextProcess ~ No ready process instances at this time." << std::endl;
             return nullptr;
         }
 
@@ -100,7 +100,30 @@ public:
             if (process_cursor->getArrivalTime() <= current_time && process_cursor->getState() == Process::NEW) {
                 process_cursor->setState(Process::READY); // Se o tempo de chegada é menor ou igual do que o tempo atual, seto o estado pronto
             }
+            if (process_cursor->getArrivalTime() <= current_time && process_cursor->getState() == Process::SUSPENDED) {
+                process_cursor->setState(Process::READY);
+            }
         }
+    }
+
+    /**
+     * checkPreemptionAvaibility
+     * - Verifica se um processo tem prioridade
+     * maior do que o outro
+    */
+    virtual bool checkPreemptionAvaibility(Process* executing_process) {
+        /**
+         * Posso premptar se acho algum processo em execução
+         * com prioridade maior
+        */
+        
+        for (auto &cursor : pidTable) {
+            Process* process_cursor = cursor.second;
+            if (process_cursor->getState() == Process::READY && executing_process->getPriority() < process_cursor->getPriority()) {
+                return 1;
+            };
+        }
+        return 0;
     }
 
     /**

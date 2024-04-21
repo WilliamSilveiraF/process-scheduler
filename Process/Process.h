@@ -26,6 +26,7 @@ public:
     enum State {
         NEW,
         READY,
+        SUSPENDED,
         EXECUTING,
         FINISHED
     };
