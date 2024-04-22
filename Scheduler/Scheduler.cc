@@ -7,7 +7,7 @@
  * - Deixo zerado o contador de chaveamento
  * de contexto
 */
-Scheduler::Scheduler(SchedulingAlgorithm* new_algorithm) : holding_algorithm(new_algorithm) {
+Scheduler::Scheduler(Algorithm* new_algorithm) : holding_algorithm(new_algorithm) {
     holding_algorithm->loadScheduler(this);
     switch_context_amount = 0;
 }
@@ -41,10 +41,10 @@ void Scheduler::putProcess(Process* new_process_instance) {
 
 
 /**
- * selectSchedulingAlgorithm
+ * selectAlgorithm
  * Seleciono algoritmo que quero executar
 */
-void Scheduler::selectSchedulingAlgorithm(SchedulingAlgorithm* new_algorithm) {
+void Scheduler::selectAlgorithm(Algorithm* new_algorithm) {
     switch_context_amount = 0;
     holding_algorithm = new_algorithm;
     holding_algorithm->loadScheduler(this);

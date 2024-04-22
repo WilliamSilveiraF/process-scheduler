@@ -6,11 +6,11 @@
 #include <map>
 #include <functional>
 #include "Process.h"
-#include "SchedulingAlgorithm.h"
+#include "Algorithm.h"
 #include "Scheduler.h"
 
-// Define a classe RM, que herda de SchedulingAlgorithm
-class RM : public SchedulingAlgorithm {
+// Define a classe RM, que herda de Algorithm
+class RM : public Algorithm {
 private:
     // Nome do algoritmo, usado para fins de impressão
     const char * algorithmName = "Rate Monotonic Served";

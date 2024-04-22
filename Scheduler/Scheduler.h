@@ -2,19 +2,19 @@
 #define __SCHEDULER__
 
 #include "CPU.h"
-#include "SchedulingAlgorithm.h"
+#include "Algorithm.h"
 
 class Scheduler {
 private:
     /* CPU */
     CPU ine5412_core;
     /* Abstração do algoritmo de escalonamento */
-    SchedulingAlgorithm* holding_algorithm;
+    Algorithm* holding_algorithm;
     /* indexador de trocas de contexto */
     int switch_context_amount; 
 
 public:
-    Scheduler(SchedulingAlgorithm* new_algorithm);
+    Scheduler(Algorithm* new_algorithm);
    
    /**
     * handleNextProcess
@@ -52,10 +52,10 @@ public:
     void yield();
 
     /**
-     * selectSchedulingAlgorithm
+     * selectAlgorithm
      * Seleciono algoritmo que quero executar
     */
-    void selectSchedulingAlgorithm(SchedulingAlgorithm* new_algorithm);
+    void selectAlgorithm(Algorithm* new_algorithm);
 
     /**
      * getSwitchContextAmount

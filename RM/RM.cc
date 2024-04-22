@@ -2,7 +2,7 @@
 #include <queue>
 #include <algorithm>
 #include "Process.h"
-#include "SchedulingAlgorithm.h"
+#include "Algorithm.h"
 #include "RM.h"
 
 RM::RM() {}

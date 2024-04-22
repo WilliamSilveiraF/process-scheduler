@@ -1,5 +1,5 @@
-#ifndef __SCHEDULING_ALGORITHM__
-#define __SCHEDULING_ALGORITHM__
+#ifndef __ALGORITHM__
+#define __ALGORITHM__
 
 #include <iostream>
 #include <vector>
@@ -12,8 +12,8 @@
 
 class Scheduler; // Declaração antecipada da classe Scheduler
 
-// SchedulingAlgorithm Header File
-class SchedulingAlgorithm 
+// Algorithm Header File
+class Algorithm 
 {
 protected:
     /**
@@ -46,7 +46,7 @@ public:
     */  
     virtual void yield() = 0;
 
-    virtual ~SchedulingAlgorithm() {}
+    virtual ~Algorithm() {}
 
     /**
      * handleNextProcess
@@ -55,7 +55,7 @@ public:
     */
     virtual Process* handleNextProcess() {
         if (process_instances.empty()) { // Se não há nenhum processo a ser escalonado, retorno nullptr
-            //std::cout << "SchedulingAlgorithm::handleNextProcess ~ No process instances are currently available for scheduling" << std::endl;
+            //std::cout << "Algorithm::handleNextProcess ~ No process instances are currently available for scheduling" << std::endl;
             return nullptr;
         }
 
@@ -67,7 +67,7 @@ public:
         }
 
         if (ready_process_instances.empty()) { // Se não há processos processos prontos, retorno nullptr
-            //std::cout << "SchedulingAlgorithm::handleNextProcess ~ No ready process instances at this time." << std::endl;
+            //std::cout << "Algorithm::handleNextProcess ~ No ready process instances at this time." << std::endl;
             return nullptr;
         }
 

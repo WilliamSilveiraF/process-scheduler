@@ -2,7 +2,7 @@
 CC = g++
 
 # Compiler flags
-CFLAGS = -Wall -std=c++11 -IReadFile -IScheduler -IProcess -ISchedulingAlgorithm -ICPU -IRM -IEDF
+CFLAGS = -Wall -std=c++11 -IReadFile -IScheduler -IProcess -IAlgorithm -ICPU -IRM -IEDF
 
 # Target executable name
 TARGET = main

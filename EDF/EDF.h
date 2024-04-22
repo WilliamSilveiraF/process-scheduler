@@ -2,10 +2,10 @@
 #define __EDF__
 
 #include "Process.h"
-#include "SchedulingAlgorithm.h"
+#include "Algorithm.h"
 #include <vector>
 
-class EDF : public SchedulingAlgorithm {
+class EDF : public Algorithm {
 public:
     EDF();
     virtual ~EDF();

@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 
     vector<Process *> processes = fileReader.get_processes();
 
-    SchedulingAlgorithm* schedAlg = nullptr;
+    Algorithm* schedAlg = nullptr;
     if (algorithm == "EDF") {
         schedAlg = new EDF();
     } else if (algorithm == "RM") {
