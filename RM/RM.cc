@@ -10,27 +10,25 @@ RM::RM() {}
 Process* RM::orderReadyProcessInstancesByAlgorithmRules(std::vector<Process*> ready_process_instances) {
     std::sort(ready_process_instances.begin(), ready_process_instances.end(), 
         [](Process* a, Process* b) {
-            return a->getPriority() > b->getPriority();  // Ordena pelo período em vez de prioridade
+            return a->getPriority() > b->getPriority(); 
         }
     );
     return ready_process_instances.empty() ? nullptr : ready_process_instances.front();
 }
 
 void RM::yield() {
-    std::cout << "-> Início algoritmo Rate Monotonic - RM...\n\n";
+    std::cout << "\nRate Monotonic\n\n";
 
-    int currentTime = 0; // Representa o tempo atual na simulação
-    Process* prevProcess = nullptr; // Mantém o registro do processo anterior
-    std::vector<Process*> allProcesses = process_instances;  // Todos os processos a serem escalonados
+    int currentTime = 0; 
+    Process* prevProcess = nullptr; 
+    std::vector<Process*> allProcesses = process_instances;  
 
-    // Imprime os cabeçalhos para o diagrama de tempo
     std::cout << "tempo ";
     for (size_t i = 1; i <= allProcesses.size(); i++) {
         std::cout << "P" << i << " ";
     }
     std::cout << "\n";
 
-    // Função lambda para imprimir o estado atual dos processos
     auto printProcessesState = [&]() {
         std::cout << " " << currentTime << "-" << (currentTime + 1) << "  ";
         for (Process* p : allProcesses) {
@@ -43,7 +41,7 @@ void RM::yield() {
                     p->setWaitingTime(p->getWaitingTime()+1);
                     break;
                 case Process::SUSPENDED:
-                    std::cout << "ss ";
+                    std::cout << "-- ";
                     break;
                 default:
                     std::cout << "   ";
@@ -53,12 +51,10 @@ void RM::yield() {
         std::cout << "\n";
     };
 
-    // Enquanto houver processos a serem escalonados
     while (!process_instances.empty()) {
-        syncReadyQueue(currentTime); // Atualiza a lista de processos prontos
-        Process* currentProcess = handleNextProcess(); // Pega o próximo processo a ser escalonado
+        syncReadyQueue(currentTime); 
+        Process* currentProcess = handleNextProcess();
 
-        // Se não houver processo atual ou se o tempo de chegada do processo for maior que o tempo atual
         while (!currentProcess || currentProcess->getArrivalTime() > currentTime) {
             printProcessesState();
             currentTime++;
@@ -68,7 +64,6 @@ void RM::yield() {
             }
         }
 
-        // Realiza a troca de contexto se o processo atual for diferente do anterior
         if (prevProcess != currentProcess && holding_scheduler) {
             holding_scheduler->switchContext(prevProcess, currentProcess);
         }
@@ -79,7 +74,6 @@ void RM::yield() {
         
         //std::cout << "P" << currentProcess->getID() << " execution time " << currentProcess->getExecutionTime() << "\n";
         //std::cout << "P" << currentProcess->getID() << " remaining time " << currentProcess->getRemainingTime() << "\n";
-        // Executa o processo pelo tempo de execução
         bool preemptionExecuted = 0;
         while (currentProcess->getExecutionTime() > 0) {
             syncReadyQueue(currentTime);
@@ -107,7 +101,7 @@ void RM::yield() {
             currentProcess->setState(Process::READY);
             holding_scheduler->putProcess(currentProcess);
         } else {
-            std::cout << "P" << currentProcess->getID() << " próxima execução em " << currentProcess->getArrivalTime() + currentProcess->getPeriod() << "\n";
+            //std::cout << "P" << currentProcess->getID() << " próxima execução em " << currentProcess->getArrivalTime() + currentProcess->getPeriod() << "\n";
             currentProcess->setArrivalTime(currentProcess->getArrivalTime() + currentProcess->getPeriod());
             currentProcess->setState(Process::SUSPENDED);
             currentProcess->setExecutionTime(currentProcess->getExecutionTimeWorkload());
@@ -118,6 +112,25 @@ void RM::yield() {
         prevProcess = currentProcess;
     }
 
-    // Imprime os resultados da simulação
     logStats(holding_scheduler->getSwitchContextAmount(), algorithmName);
+}
+
+/**
+ * checkRMPreemptionAvaibility
+ * - Verifica se um processo tem prioridade
+ * maior do que o outro
+*/
+bool RM::checkRMPreemptionAvaibility(Process* executing_process) {
+    /**
+     * Posso premptar se acho algum processo em execução
+     * com prioridade maior
+    */
+    
+    for (auto &cursor : pidTable) {
+        Process* process_cursor = cursor.second;
+        if (process_cursor->getState() == Process::READY && executing_process->getPriority() < process_cursor->getPriority()) {
+            return 1;
+        };
+    }
+    return 0;
 }

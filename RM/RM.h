@@ -27,6 +27,12 @@ public:
 
     // Função para ordenar os processos prontos. No caso do RM, o processo que chegou primeiro é selecionado. Ela sobrescreve a função da classe base.
     Process* orderReadyProcessInstancesByAlgorithmRules(std::vector<Process*> ready_process_instances) override;
+    /**
+     * checkRMPreemptionAvaibility
+     * - Verifica se um processo tem prioridade
+     * maior do que o outro
+    */
+    bool checkRMPreemptionAvaibility(Process* executing_process);
 };
 
 #endif // RM

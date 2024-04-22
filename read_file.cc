@@ -9,31 +9,6 @@
 
 using namespace std;
 
-class ProcessParams
-{
-public:
-	ProcessParams(int c, int d, int p) { 
-		creation_time = c;
-		duration = d;
-		priority = p;
-	}
-
-	friend ostream &operator<<(ostream& os, const ProcessParams& p) {
-		os << "Creation time = " << p.creation_time << " duration = " << p.duration << " priority = " << p.priority << endl;
-		return os;
-	}
-
-	//getters
-	int getCreationTime() { return creation_time; }
-	int getDuration() { return duration; }
-	int getPriority() { return priority; }
-
-private:	
-	int creation_time;
-	int duration; //seconds
-	int priority;
-};
-
 class File
 {
 
@@ -54,11 +29,11 @@ public:
             cout << "Arquivo não está aberto!" << endl;
         }
         
-        int processID = 1;  // Assuming IDs start at 1 and increment by 1
+        int processID = 1;
         while (myfile >> arrival_time >> execution_time >> period >> deadline >> priority) {
             Process *p = new Process(processID, arrival_time, execution_time, period, deadline, priority);
             processes.push_back(p);
-            processID++;  // Increment the process ID for the next process
+            processID++;
         }
 
         cout << "Quantidade de processos lidos do arquivo: " << processes.size() << endl;
@@ -92,52 +67,40 @@ private:
 };
 
 
-int main() {
-    // Read processes from the file
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        cout << "Usage: " << argv[0] << " [EDF | RM]" << endl;
+        return 1;
+    }
+
+    string algorithm(argv[1]);
+
     File fileReader;
     fileReader.read_file();
     fileReader.print_processes_params();
 
-    // Get processes
     vector<Process *> processes = fileReader.get_processes();
 
-    // Start the simulations
-    std::cout<< " \n\n  ======================================\n"
-             << "||                                      ||\n"
-             << "||  Simulação de escalonamento de CPU   ||\n"
-             << "||                                      ||\n"
-            << "  ======================================\n" << std::endl;
-   
-    //======================================
-    // RM Scheduling Algorithm
-    //======================================
-
-    // Setup scheduler with RM algorithm
-    //RM rmAlgorithm;
-    //Scheduler rm_scheduler(&rmAlgorithm);
-    //
-    //// Add processes to scheduler
-    //for(auto process : processes) {
-    //    rm_scheduler.putProcess(process);
-    //}
-    //
-    //// Run the scheduling simulation for RM
-    //rm_scheduler.yield();
-    //rm_scheduler.restartProcessInstances(processes);
-
-    //======================================
-    // EDF Scheduling Algorithm
-    //======================================
-
-    EDF edfAlgorithm;
-    Scheduler edf_scheduler(&edfAlgorithm);
-
-    // Add processes to scheduler
-    for(auto process : processes) {
-        edf_scheduler.putProcess(process);
+    SchedulingAlgorithm* schedAlg = nullptr;
+    if (algorithm == "EDF") {
+        schedAlg = new EDF();
+    } else if (algorithm == "RM") {
+        schedAlg = new RM();
+    } else {
+        cout << "Invalid scheduling algorithm specified. Use 'EDF' or 'RM'." << endl;
+        return 1;
     }
 
-    // Run the scheduling simulation for EDF
-    edf_scheduler.yield();
-    edf_scheduler.restartProcessInstances(processes);
+    Scheduler scheduler(schedAlg);
+
+    for(auto process : processes) {
+        scheduler.putProcess(process);
+    }
+
+    scheduler.yield();
+    scheduler.restartProcessInstances(processes);
+
+    delete schedAlg;
+
+    return 0;
 }

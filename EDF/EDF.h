@@ -18,4 +18,4 @@ private:
     const char *algorithmName = "Earliest Deadline First";
 };
 
-#endif 
+#endif // EDF

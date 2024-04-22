@@ -107,26 +107,6 @@ public:
     }
 
     /**
-     * checkRMPreemptionAvaibility
-     * - Verifica se um processo tem prioridade
-     * maior do que o outro
-    */
-    virtual bool checkRMPreemptionAvaibility(Process* executing_process) {
-        /**
-         * Posso premptar se acho algum processo em execução
-         * com prioridade maior
-        */
-        
-        for (auto &cursor : pidTable) {
-            Process* process_cursor = cursor.second;
-            if (process_cursor->getState() == Process::READY && executing_process->getPriority() < process_cursor->getPriority()) {
-                return 1;
-            };
-        }
-        return 0;
-    }
-
-    /**
      * loadScheduler
      * - Para cada algoritmo de escalonamento 
      * existe um escalonador
@@ -201,7 +181,6 @@ public:
         /**
          * Print das stats de turnaround time
         */
-
         std::cout << "[Turnaround time for each process] \n";
 
         for (const auto& cursor : pidTable) {
@@ -218,4 +197,4 @@ public:
     }
 };
 
-#endif 
+#endif // Algorithm

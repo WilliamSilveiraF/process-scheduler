@@ -8,20 +8,18 @@ EDF::EDF() {}
 EDF::~EDF() {}
 
 void EDF::yield() {
-    std::cout << "-> Início algoritmo Rate Monotonic - RM...\n\n";
+    std::cout << "\nEarliest Deadline First\n\n";
 
-    int currentTime = 0; // Representa o tempo atual na simulação
-    Process* prevProcess = nullptr; // Mantém o registro do processo anterior
-    std::vector<Process*> allProcesses = process_instances;  // Todos os processos a serem escalonados
+    int currentTime = 0; 
+    Process* prevProcess = nullptr;
+    std::vector<Process*> allProcesses = process_instances;
 
-    // Imprime os cabeçalhos para o diagrama de tempo
     std::cout << "tempo ";
     for (size_t i = 1; i <= allProcesses.size(); i++) {
         std::cout << "P" << i << " ";
     }
     std::cout << "\n";
 
-    // Função lambda para imprimir o estado atual dos processos
     auto printProcessesState = [&]() {
         std::cout << " " << currentTime << "-" << (currentTime + 1) << "  ";
         for (Process* p : allProcesses) {
@@ -34,7 +32,7 @@ void EDF::yield() {
                     p->setWaitingTime(p->getWaitingTime()+1);
                     break;
                 case Process::SUSPENDED:
-                    std::cout << "ss ";
+                    std::cout << "-- ";
                     break;
                 default:
                     std::cout << "   ";
@@ -43,13 +41,16 @@ void EDF::yield() {
         }
         std::cout << "\n";
     };
-
-    // Enquanto houver processos a serem escalonados
+    
+    
+    /**
+     * Enquanto houver processos a
+     * serem escalonados
+     */    
     while (!process_instances.empty()) {
-        syncReadyQueue(currentTime); // Atualiza a lista de processos prontos
-        Process* currentProcess = handleNextProcess(); // Pega o próximo processo a ser escalonado
+        syncReadyQueue(currentTime);
+        Process* currentProcess = handleNextProcess();
 
-        // Se não houver processo atual ou se o tempo de chegada do processo for maior que o tempo atual
         while (!currentProcess || currentProcess->getArrivalTime() > currentTime) {
             printProcessesState();
             currentTime++;
@@ -59,7 +60,11 @@ void EDF::yield() {
             }
         }
 
-        // Realiza a troca de contexto se o processo atual for diferente do anterior
+        
+        /**
+         * Realizo a troca de contexto se
+         * o processo atual for diferente do anterior
+        */
         if (prevProcess != currentProcess && holding_scheduler) {
             holding_scheduler->switchContext(prevProcess, currentProcess);
         }
@@ -70,7 +75,10 @@ void EDF::yield() {
         
         //std::cout << "P" << currentProcess->getID() << " execution time " << currentProcess->getExecutionTime() << "\n";
         //std::cout << "P" << currentProcess->getID() << " remaining time " << currentProcess->getRemainingTime() << "\n";
-        // Executa o processo pelo tempo de execução
+        /**
+         * Executo o processo pelo
+         * tempo de execução
+        */
         bool preemptionExecuted = 0;
         while (currentProcess->getExecutionTime() > 0) {
             syncReadyQueue(currentTime);
@@ -98,18 +106,19 @@ void EDF::yield() {
             currentProcess->setState(Process::READY);
             holding_scheduler->putProcess(currentProcess);
         } else {
-            std::cout << "P" << currentProcess->getID() << " próxima execução em " << currentProcess->getArrivalTime() + currentProcess->getPeriod() << "\n";
+            //std::cout << "P" << currentProcess->getID() << " Arrival time " << currentProcess->getArrivalTime() << "\n";
+            //std::cout << "P" << currentProcess->getID() << " Period " << currentProcess->getPeriod() << "\n";
+            //std::cout << "P" << currentProcess->getID() << " próxima execução em " << currentProcess->getArrivalTime() + currentProcess->getPeriod() << "\n";
             currentProcess->setArrivalTime(currentProcess->getArrivalTime() + currentProcess->getPeriod());
+            currentProcess->setDeadline(currentProcess->getArrivalTime() + currentProcess->getPeriod());
             currentProcess->setState(Process::SUSPENDED);
             currentProcess->setExecutionTime(currentProcess->getExecutionTimeWorkload());
             holding_scheduler->putProcess(currentProcess);
         }
-        //currentProcess->setTurnaroundTime(currentProcess->getEndTime() - currentProcess->getArrivalTime());
         
         prevProcess = currentProcess;
     }
 
-    // Imprime os resultados da simulação
     logStats(holding_scheduler->getSwitchContextAmount(), algorithmName);
 }
 

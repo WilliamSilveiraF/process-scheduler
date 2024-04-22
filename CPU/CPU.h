@@ -58,4 +58,4 @@ private:
     uint64_t registrars[6];
 };
 
-#endif
+#endif // CPU
