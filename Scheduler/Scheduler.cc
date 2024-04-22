@@ -51,22 +51,6 @@ void Scheduler::selectAlgorithm(Algorithm* new_algorithm) {
 }
 
 /**
- * restartProcessInstances
- * - Restarto todos os processos da minha lista de processos
- * para a execução do próximo algoritmo de escalonamento
-*/
-void Scheduler::restartProcessInstances(const std::vector<Process*>& process_instances) {
-    for (Process* process_cursor : process_instances) {
-        process_cursor->setTurnaroundTime(0);
-        process_cursor->setWaitingTime(0);
-        process_cursor->setStartTime(0);
-        process_cursor->setEndTime(0);
-        process_cursor->setRemainingTime(process_cursor->getExecutionTime());
-        process_cursor->setState(Process::NEW);
-    }
-}
-
-/**
  * switchContext
  * - Faço o chaveamento de contexto entre o processo atual
  * em execução e o novo processo 

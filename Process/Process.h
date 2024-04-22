@@ -14,6 +14,7 @@ private:
     int priority;
     int waiting_time; 
     int turnaround_time;
+    int missed_deadlines;
     int start_time;
     int end_time;
     int remaining_time;
@@ -68,6 +69,9 @@ public:
     
     int getTurnaroundTime() const { return turnaround_time; }
     void setTurnaroundTime(int new_turnaorund_time) { turnaround_time = new_turnaorund_time; }
+
+    int getMissedDeadlines() const { return missed_deadlines; }
+    void setMissedDeadlines(int new_missed_deadlines) { missed_deadlines = new_missed_deadlines; }
 
     int getStartTime() const { return start_time; }
     void setStartTime(int new_start_time) { start_time = new_start_time; }

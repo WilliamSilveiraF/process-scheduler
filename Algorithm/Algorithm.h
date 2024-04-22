@@ -187,9 +187,15 @@ public:
             Process* process_cursor = cursor.second;
             std::cout << "P" << cursor.first << "  " << process_cursor->getTurnaroundTime() << "\n";
         };
-        
+
         std::cout << "Total Turnaround Time Avg:  " << getTurnaroundTimeAvg() << "\n\n";
 
+        std::cout << "[Missed deadlines for each process] \n";
+        for (const auto& cursor : pidTable) {
+            Process* process_cursor = cursor.second;
+            std::cout << "P" << cursor.first << "  " << process_cursor->getMissedDeadlines() << "\n";
+        };
+        
         /* PRINT DE CONTADOR DE TROCAS DE CONTEXTO */
         std::cout << "Switched context amount: " << switched_context_amount << "\n";
 

@@ -100,6 +100,9 @@ void EDF::yield() {
 
         if (currentProcess->getRemainingTime() <= 0) {
             currentProcess->setEndTime(currentTime);
+            if (currentProcess->getEndTime() > currentProcess->getDeadline()) {
+                currentProcess->setMissedDeadlines(currentProcess->getMissedDeadlines() + 1);
+            }
             currentProcess->setTurnaroundTime(currentTime - currentProcess->getCreationTime());
             currentProcess->setState(Process::FINISHED);
         } else if (preemptionExecuted) {

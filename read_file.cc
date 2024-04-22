@@ -98,7 +98,6 @@ int main(int argc, char *argv[]) {
     }
 
     scheduler.yield();
-    scheduler.restartProcessInstances(processes);
 
     delete schedAlg;
 

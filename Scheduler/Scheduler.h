@@ -31,13 +31,6 @@ public:
     void putProcess(Process* new_process_instance);
     
     /**
-     * restartProcessInstances
-     * - Restarto todos os processos da minha lista de processos
-     * para a execução do próximo algoritmo de escalonamento
-    */
-    void restartProcessInstances(const std::vector<Process*>& process_instances);
-    
-    /**
      * switchContext
      * - Faço o chaveamento de contexto entre o processo atual
      * em execução e o novo processo 
