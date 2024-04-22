@@ -10,7 +10,7 @@
 #include "Process.h"
 
 
-class Scheduler; // Declaração antecipada da classe Scheduler
+class Scheduler;
 
 // Algorithm Header File
 class Algorithm 
